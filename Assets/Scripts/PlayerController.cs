@@ -6,6 +6,8 @@ public class PlayerController : MonoBehaviour
 {
 
     public float speed = 0.4f;
+    public float slowFactor = 0.5f;
+    private bool _slowed = false;
     Vector2 _dest = Vector2.zero;
     Vector2 _dir = Vector2.zero;
     Vector2 _nextDir = Vector2.zero;
@@ -33,7 +35,7 @@ public class PlayerController : MonoBehaviour
         GM = GameObject.Find("Game Manager").GetComponent<GameManager>();
         SM = GameObject.Find("Game Manager").GetComponent<ScoreManager>();
         GUINav = GameObject.Find("UI Manager").GetComponent<GameGUINavigation>();
-        _dest = transform.position;
+        _dest = GM.spawn;
     }
 
     // Update is called once per frame
@@ -90,20 +92,22 @@ public class PlayerController : MonoBehaviour
         Vector2 pos = transform.position;
         direction += new Vector2(direction.x * 0.45f, direction.y * 0.45f);
         RaycastHit2D hit = Physics2D.Linecast(pos + direction, pos);
+        _slowed = hit.collider.name == "pacdot" && hit.collider.gameObject.GetComponent<Pacdot>().state == Pacdot.State.Slow;
         return hit.collider.name == "pacdot" || (hit.collider == GetComponent<Collider2D>());
     }
 
     public void ResetDestination()
     {
-        _dest = new Vector2(15f, 11f);
+        _dest = GM.spawn;
         GetComponent<Animator>().SetFloat("DirX", 1);
         GetComponent<Animator>().SetFloat("DirY", 0);
     }
 
     void ReadInputAndMove()
     {
+        Debug.Log("Hi");
         // move closer to destination
-        Vector2 p = Vector2.MoveTowards(transform.position, _dest, speed);
+        Vector2 p = Vector2.MoveTowards(transform.position, _dest, _slowed && !GameManager.scared ? slowFactor * speed : speed);
         GetComponent<Rigidbody2D>().MovePosition(p);
 
         // get the next direction from keyboard

@@ -1,20 +1,67 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
 
 public class Pacdot : MonoBehaviour {
 
-	void OnTriggerEnter2D(Collider2D other)
-	{
-		if(other.name == "pacman")
-		{
-			GameManager.score += 10;
-		    GameObject[] pacdots = GameObject.FindGameObjectsWithTag("pacdot");
-            Destroy(gameObject);
+    public enum State 
+    {
+        Dot,
+        Slow,
+        Disabled
+    }
 
-		    if (pacdots.Length == 1)
-		    {
-		        GameObject.FindObjectOfType<GameGUINavigation>().LoadLevel();
-		    }
-		}
-	}
+    public State state = State.Dot;
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.name == "pacman")
+        {
+            switch (state)
+            {
+            case State.Dot:
+                GameManager.score += 10;
+                Pacdot[] pacdots = Object.FindObjectsOfType<Pacdot>(); // rip performance
+                if (GameManager.scared) {
+                    Disable();
+                } else {
+                    Slow();
+                }
+                //Destroy (gameObject);
+
+                if (!pacdots.Any(x => x.state == State.Dot)) {
+                    GameObject.FindObjectOfType<GameGUINavigation>().LoadLevel ();
+                }
+
+                /*if (pacdots.Length == 1) {
+                    GameObject.FindObjectOfType<GameGUINavigation> ().LoadLevel ();
+                }*/
+                break;
+
+            case State.Slow:
+                if (GameManager.scared) {
+                    Disable();
+                }
+                break;
+
+            case State.Disabled:
+                if (!GameManager.scared) {
+                    Slow();
+                }
+                break;
+            }
+        }
+    }
+
+    public void Disable()
+    {
+        state = State.Disabled;
+        GetComponent<SpriteRenderer>().color = Color.black;
+    }
+
+    public void Slow()
+    {
+        state = State.Slow;
+        GetComponent<SpriteRenderer>().color = Color.cyan;
+    }
 }
