@@ -13,6 +13,14 @@ public class Pacdot : MonoBehaviour {
 
     public State state = State.Dot;
 
+    private GameManager GM;
+
+    // Use this for initialization
+    void Start()
+    {
+        GM = GameObject.Find ("Game Manager").GetComponent<GameManager>();
+    }
+
     void OnTriggerEnter2D(Collider2D other)
     {
         if(other.name == "pacman")
@@ -46,7 +54,9 @@ public class Pacdot : MonoBehaviour {
 
             case State.Disabled:
                 if (!GameManager.scared) {
-                    Slow();
+                    if (GM.alwaysLeaveSlow) {
+                        Slow ();
+                    }
                 }
                 break;
             }

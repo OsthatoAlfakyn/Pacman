@@ -27,6 +27,8 @@ public class GameManager : MonoBehaviour {
 
     public float SpeedPerLevel;
 
+    public bool alwaysLeaveSlow;
+
     public float spawnClearSlowRange;
     public float ghostClearSlowRange;
 
