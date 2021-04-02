@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviour
         GM = GameObject.Find("Game Manager").GetComponent<GameManager>();
         SM = GameObject.Find("Game Manager").GetComponent<ScoreManager>();
         GUINav = GameObject.Find("UI Manager").GetComponent<GameGUINavigation>();
-        _dest = GM.spawn;
+        _dest = GameManager.spawn;
     }
 
     // Update is called once per frame
@@ -98,14 +98,13 @@ public class PlayerController : MonoBehaviour
 
     public void ResetDestination()
     {
-        _dest = GM.spawn;
+        _dest = GameManager.spawn;
         GetComponent<Animator>().SetFloat("DirX", 1);
         GetComponent<Animator>().SetFloat("DirY", 0);
     }
 
     void ReadInputAndMove()
     {
-        Debug.Log("Hi");
         // move closer to destination
         Vector2 p = Vector2.MoveTowards(transform.position, _dest, _slowed && !GameManager.scared ? slowFactor * speed : speed);
         GetComponent<Rigidbody2D>().MovePosition(p);
