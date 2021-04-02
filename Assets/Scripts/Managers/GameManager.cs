@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour {
     public float ghostClearSlowRange;
 
     public bool randomiseSpawn;
-    public static Vector3 spawn;
+    public Vector3 spawn;
     
     //-------------------------------------------------------------------
     // singleton implementation
@@ -88,10 +88,8 @@ public class GameManager : MonoBehaviour {
         if (randomiseSpawn) {
             Pacdot[] pacdots = GameObject.FindObjectsOfType<Pacdot> ();
             spawn = pacdots [Random.Range (0, pacdots.Length)].transform.position;
-            pacman.transform.position = spawn;
-        } else {
-            spawn = pacman.transform.position;
         }
+        pacman.transform.position = spawn;
 
         // Adjust Ghost variables!
         clyde.GetComponent<GhostMove>().speed += Level * SpeedPerLevel;

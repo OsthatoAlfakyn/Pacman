@@ -72,6 +72,6 @@ public class Pacdot : MonoBehaviour {
     public void Slow()
     {
         state = State.Slow;
-        GetComponent<SpriteRenderer>().color = Color.magenta;
+        GetComponent<SpriteRenderer>().color = Color.cyan;
     }
 }

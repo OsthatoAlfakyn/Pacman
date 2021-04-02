@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviour
         GM = GameObject.Find("Game Manager").GetComponent<GameManager>();
         SM = GameObject.Find("Game Manager").GetComponent<ScoreManager>();
         GUINav = GameObject.Find("UI Manager").GetComponent<GameGUINavigation>();
-        _dest = GameManager.spawn;
+        _dest = GM.spawn;
     }
 
     // Update is called once per frame
@@ -98,7 +98,7 @@ public class PlayerController : MonoBehaviour
 
     public void ResetDestination()
     {
-        _dest = GameManager.spawn;
+        _dest = GM.spawn;
         GetComponent<Animator>().SetFloat("DirX", 1);
         GetComponent<Animator>().SetFloat("DirY", 0);
     }
