@@ -1,12 +1,16 @@
-Pacman-Clone
+Frustration-man
 ============
 
 ![Screenshot](http://i.imgur.com/GQcmfQY.png)
 
-**[Play on Web!](http://vilbeyli.github.io/Pacman/)**
+Based on https://github.com/vilbeyli/Pacman.
 
-A Pacman clone made in Unity3D, with tutorials from [noobtuts](http://noobtuts.com/unity/2d-pacman-game). In addition to the tutorial, [the original AI](http://gameinternals.com/post/2072558330/understanding-pac-man-ghost-behavior) is implemented with the help of [Game Internals](http://gameinternals.com/post/2072558330/understanding-pac-man-ghost-behavior) as well as menus, global high scores and a basic level progression system.
+The project is currently configured for the intense version. The relevant variables to change are exposed in the inspector as fields. The slow factor is under pacman, the others under Game Manager.
 
-----
-
-See another similar clone game: [2.5D Minesweeper](https://github.com/vilbeyli/Minesweeper)
+| Field                  | Normal | Intense | Explanation
+| ---------------------- |--------| ------- | ---
+| Slow Factor            | 0.5    | 0.33    | Speed multiplier while slowed
+| Always Leave Slow      | Off    | On      | Whether Pacman leaves slow in empty corridors
+| Spawn Clear Slow Range | 5      | 4       | The range from spawn where slow is cleared on respawn
+| Ghost Clear Slow Range | 8      | 8       | The range of the slow-clearing "explosion" when eating a ghost
+| Randomise Spawn        | Off    | Off     | Whether spawn is set on a random pellet upon entering a level
