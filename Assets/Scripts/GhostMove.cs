@@ -7,40 +7,40 @@ public class GhostMove : MonoBehaviour {
 
     // ----------------------------
     // Navigation variables
-	private Vector3 waypoint;			// AI-determined waypoint
-	private Queue<Vector3> waypoints;	// waypoints used on Init and Scatter states
+    private Vector3 waypoint;            // AI-determined waypoint
+    private Queue<Vector3> waypoints;    // waypoints used on Init and Scatter states
 
-	// direction is set from the AI component
-	public Vector3 _direction;
-	public Vector3 direction 
-	{
-		get
-		{
-			return _direction;
-		}
+    // direction is set from the AI component
+    public Vector3 _direction;
+    public Vector3 direction 
+    {
+        get
+        {
+            return _direction;
+        }
 
-		set
-		{
-			_direction = value;
-			Vector3 pos = new Vector3((int)transform.position.x, (int)transform.position.y, (int)transform.position.z);
-			waypoint = pos + _direction;
-			//Debug.Log ("waypoint (" + waypoint.position.x + ", " + waypoint.position.y + ") set! _direction: " + _direction.x + ", " + _direction.y);
-		
-		}
-	}
+        set
+        {
+            _direction = value;
+            Vector3 pos = new Vector3((int)transform.position.x, (int)transform.position.y, (int)transform.position.z);
+            waypoint = pos + _direction;
+            //Debug.Log ("waypoint (" + waypoint.position.x + ", " + waypoint.position.y + ") set! _direction: " + _direction.x + ", " + _direction.y);
+        
+        }
+    }
 
-	public float speed = 0.3f;
+    public float speed = 0.3f;
 
     // ----------------------------
     // Ghost mode variables
-	public float scatterLength = 5f;
-	public float waitLength = 0.0f;
+    public float scatterLength = 5f;
+    public float waitLength = 0.0f;
 
-	private float timeToEndScatter;
-	private float timeToEndWait;
+    private float timeToEndScatter;
+    private float timeToEndWait;
 
-	enum State { Wait, Init, Scatter, Chase, Run };
-	State state;
+    enum State { Wait, Init, Scatter, Chase, Run };
+    State state;
 
     private Vector3 _startPos;
     private float _timeToWhite;
@@ -48,75 +48,75 @@ public class GhostMove : MonoBehaviour {
     private float _toggleInterval;
     private bool isWhite = false;
 
-	// handles
-	public GameGUINavigation GUINav;
+    // handles
+    public GameGUINavigation GUINav;
     public PlayerController pacman;
     private GameManager _gm;
 
-	//-----------------------------------------------------------------------------------------
-	// variables end, functions begin
-	void Start()
-	{
-	    _gm = GameObject.Find("Game Manager").GetComponent<GameManager>();
+    //-----------------------------------------------------------------------------------------
+    // variables end, functions begin
+    void Start()
+    {
+        _gm = GameObject.Find("Game Manager").GetComponent<GameManager>();
         _toggleInterval = _gm.scareLength * 0.33f * 0.20f;  
-		InitializeGhost();
-	}
+        InitializeGhost();
+    }
 
     public float DISTANCE;
 
-	void FixedUpdate ()
-	{
-	    DISTANCE = Vector3.Distance(transform.position, waypoint);
-
-		if(GameManager.gameState == GameManager.GameState.Game){
-			animate ();
-
-			switch(state)
-			{
-			case State.Wait:
-				Wait();
-				break;
-
-			case State.Init:
-				Init();
-				break;
-
-			case State.Scatter:
-				Scatter();
-				break;
-
-			case State.Chase:
-				ChaseAI();
-				break;
-
-			case State.Run:
-				RunAway();
-				break;
-			}
-		}
-	}
-
-	//-----------------------------------------------------------------------------------
-	// Start() functions
-
-	public void InitializeGhost()
-	{
-	    _startPos = getStartPosAccordingToName();
-		waypoint = transform.position;	// to avoid flickering animation
-		state = State.Wait;
-	    timeToEndWait = Time.time + waitLength + GUINav.initialDelay;
-		InitializeWaypoints(state);
-	}
-
-    public void InitializeGhost(Vector3 pos)
+    void FixedUpdate ()
     {
-        transform.position = pos;
-        waypoint = transform.position;	// to avoid flickering animation
+        DISTANCE = Vector3.Distance(transform.position, waypoint);
+
+        if(GameManager.gameState == GameManager.GameState.Game){
+            animate ();
+
+            switch(state)
+            {
+            case State.Wait:
+                Wait();
+                break;
+
+            case State.Init:
+                Init();
+                break;
+
+            case State.Scatter:
+                Scatter();
+                break;
+
+            case State.Chase:
+                ChaseAI();
+                break;
+
+            case State.Run:
+                RunAway();
+                break;
+            }
+        }
+    }
+
+    //-----------------------------------------------------------------------------------
+    // Start() functions
+
+    public void InitializeGhost()
+    {
+        _startPos = getStartPosAccordingToName();
+        waypoint = transform.position;    // to avoid flickering animation
         state = State.Wait;
         timeToEndWait = Time.time + waitLength + GUINav.initialDelay;
         InitializeWaypoints(state);
     }
-	
+
+    public void InitializeGhost(Vector3 pos)
+    {
+        transform.position = pos;
+        waypoint = transform.position;    // to avoid flickering animation
+        state = State.Wait;
+        timeToEndWait = Time.time + waitLength + GUINav.initialDelay;
+        InitializeWaypoints(state);
+    }
+    
 
     private void InitializeWaypoints(State st)
     {
@@ -215,7 +215,7 @@ public class GhostMove : MonoBehaviour {
         if (st == State.Scatter)
         {
             // skip until empty line is reached, read coordinates afterwards
-            bool scatterWps = false;	// Scatter waypoints
+            bool scatterWps = false;    // Scatter waypoints
 
             using (StringReader reader = new StringReader(data))
             {
@@ -281,165 +281,172 @@ public class GhostMove : MonoBehaviour {
         return new Vector3();
     }
 
-	//------------------------------------------------------------------------------------
-	// Update functions
-	void animate()
-	{
-		Vector3 dir = waypoint - transform.position;
-		GetComponent<Animator>().SetFloat("DirX", dir.x);
-		GetComponent<Animator>().SetFloat("DirY", dir.y);
-		GetComponent<Animator>().SetBool("Run", false);
-	}
+    //------------------------------------------------------------------------------------
+    // Update functions
+    void animate()
+    {
+        Vector3 dir = waypoint - transform.position;
+        GetComponent<Animator>().SetFloat("DirX", dir.x);
+        GetComponent<Animator>().SetFloat("DirY", dir.y);
+        GetComponent<Animator>().SetBool("Run", false);
+    }
 
-	void OnTriggerEnter2D(Collider2D other)
-	{
-		if(other.name == "pacman")
-		{
-			//Destroy(other.gameObject);
-		    if (state == State.Run)
-		    {
-		        Calm();
-		        InitializeGhost(_startPos);
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.name == "pacman")
+        {
+            //Destroy(other.gameObject);
+            if (state == State.Run)
+            {
+                Pacdot[] pacdots = GameObject.FindObjectsOfType<Pacdot>();
+                foreach (Pacdot p in pacdots) {
+                    if (p.state == Pacdot.State.Slow && Vector3.Distance (transform.position, p.transform.position) <= _gm.ghostClearSlowRange) {
+                        p.Disable();
+                    }
+                }
+
+                Calm();
+                InitializeGhost(_startPos);
                 pacman.UpdateScore();
-		    }
-		       
-		    else
-		    {
-		        _gm.LoseLife();
-		    }
+            }
+               
+            else
+            {
+                _gm.LoseLife();
+            }
 
-		}
-	}
+        }
+    }
 
-	//-----------------------------------------------------------------------------------
-	// State functions
-	void Wait()
-	{
-		if(Time.time >= timeToEndWait)
-		{
-			state = State.Init;
-		    waypoints.Clear();
-			InitializeWaypoints(state);
-		}
+    //-----------------------------------------------------------------------------------
+    // State functions
+    void Wait()
+    {
+        if(Time.time >= timeToEndWait)
+        {
+            state = State.Init;
+            waypoints.Clear();
+            InitializeWaypoints(state);
+        }
 
-		// get the next waypoint and move towards it
-		MoveToWaypoint(true);
-	}
+        // get the next waypoint and move towards it
+        MoveToWaypoint(true);
+    }
 
-	void Init()
-	{
-	    _timeToWhite = 0;
+    void Init()
+    {
+        _timeToWhite = 0;
 
-		// if the Queue is cleared, do some clean up and change the state
-		if(waypoints.Count == 0)
-		{
-			state = State.Scatter;
+        // if the Queue is cleared, do some clean up and change the state
+        if(waypoints.Count == 0)
+        {
+            state = State.Scatter;
 
-		    //get direction according to sprite name
-			string name = GetComponent<SpriteRenderer>().sprite.name;
-			if(name[name.Length-1] == '0' || name[name.Length-1] == '1')	direction = Vector3.right;
-			if(name[name.Length-1] == '2' || name[name.Length-1] == '3')	direction = Vector3.left;
-			if(name[name.Length-1] == '4' || name[name.Length-1] == '5')	direction = Vector3.up;
-			if(name[name.Length-1] == '6' || name[name.Length-1] == '7')	direction = Vector3.down;
+            //get direction according to sprite name
+            string name = GetComponent<SpriteRenderer>().sprite.name;
+            if(name[name.Length-1] == '0' || name[name.Length-1] == '1')    direction = Vector3.right;
+            if(name[name.Length-1] == '2' || name[name.Length-1] == '3')    direction = Vector3.left;
+            if(name[name.Length-1] == '4' || name[name.Length-1] == '5')    direction = Vector3.up;
+            if(name[name.Length-1] == '6' || name[name.Length-1] == '7')    direction = Vector3.down;
 
-			InitializeWaypoints(state);
-			timeToEndScatter = Time.time + scatterLength;
+            InitializeWaypoints(state);
+            timeToEndScatter = Time.time + scatterLength;
 
-			return;
-		}
+            return;
+        }
 
-		// get the next waypoint and move towards it
-		MoveToWaypoint();
-	}
+        // get the next waypoint and move towards it
+        MoveToWaypoint();
+    }
 
-	void Scatter()
-	{
-		if(Time.time >= timeToEndScatter)
-		{
-			waypoints.Clear();
-			state = State.Chase;
-		    return;
-		}
+    void Scatter()
+    {
+        if(Time.time >= timeToEndScatter)
+        {
+            waypoints.Clear();
+            state = State.Chase;
+            return;
+        }
 
-		// get the next waypoint and move towards it
-		MoveToWaypoint(true);
+        // get the next waypoint and move towards it
+        MoveToWaypoint(true);
 
-	}
+    }
 
     void ChaseAI()
-	{
+    {
 
         // if not at waypoint, move towards it
         if (Vector3.Distance(transform.position, waypoint) > 0.000000000001)
-		{
-			Vector2 p = Vector2.MoveTowards(transform.position, waypoint, speed);
-			GetComponent<Rigidbody2D>().MovePosition(p);
-		}
+        {
+            Vector2 p = Vector2.MoveTowards(transform.position, waypoint, speed);
+            GetComponent<Rigidbody2D>().MovePosition(p);
+        }
 
-		// if at waypoint, run AI module
-		else GetComponent<AI>().AILogic();
+        // if at waypoint, run AI module
+        else GetComponent<AI>().AILogic();
 
-	}
+    }
 
-	void RunAway()
-	{
-		GetComponent<Animator>().SetBool("Run", true);
+    void RunAway()
+    {
+        GetComponent<Animator>().SetBool("Run", true);
 
         if(Time.time >= _timeToWhite && Time.time >= _timeToToggleWhite)   ToggleBlueWhite();
 
-		// if not at waypoint, move towards it
+        // if not at waypoint, move towards it
         if (Vector3.Distance(transform.position, waypoint) > 0.000000000001)
-		{
-			Vector2 p = Vector2.MoveTowards(transform.position, waypoint, speed);
-			GetComponent<Rigidbody2D>().MovePosition(p);
-		}
-		
-		// if at waypoint, run AI run away logic
-		else GetComponent<AI>().RunLogic();
+        {
+            Vector2 p = Vector2.MoveTowards(transform.position, waypoint, speed);
+            GetComponent<Rigidbody2D>().MovePosition(p);
+        }
+        
+        // if at waypoint, run AI run away logic
+        else GetComponent<AI>().RunLogic();
 
-	}
+    }
 
-	//------------------------------------------------------------------------------
-	// Utility functions
-	void MoveToWaypoint(bool loop = false)
-	{
-		waypoint = waypoints.Peek();		// get the waypoint (CHECK NULL?)
-        if (Vector3.Distance(transform.position, waypoint) > 0.000000000001)	// if its not reached
-		{									                        // move towards it
-			_direction = Vector3.Normalize(waypoint - transform.position);	// dont screw up waypoint by calling public setter
-			Vector2 p = Vector2.MoveTowards(transform.position, waypoint, speed);
-			GetComponent<Rigidbody2D>().MovePosition(p);
-		}
-		else 	// if waypoint is reached, remove it from the queue
-		{
-			if(loop)	waypoints.Enqueue(waypoints.Dequeue());
-			else		waypoints.Dequeue();
-		}
-	}
+    //------------------------------------------------------------------------------
+    // Utility functions
+    void MoveToWaypoint(bool loop = false)
+    {
+        waypoint = waypoints.Peek();        // get the waypoint (CHECK NULL?)
+        if (Vector3.Distance(transform.position, waypoint) > 0.000000000001)    // if its not reached
+        {                                                            // move towards it
+            _direction = Vector3.Normalize(waypoint - transform.position);    // dont screw up waypoint by calling public setter
+            Vector2 p = Vector2.MoveTowards(transform.position, waypoint, speed);
+            GetComponent<Rigidbody2D>().MovePosition(p);
+        }
+        else     // if waypoint is reached, remove it from the queue
+        {
+            if(loop)    waypoints.Enqueue(waypoints.Dequeue());
+            else        waypoints.Dequeue();
+        }
+    }
 
-	public void Frighten()
-	{
-		state = State.Run;
-		_direction *= -1;
+    public void Frighten()
+    {
+        state = State.Run;
+        _direction *= -1;
 
         _timeToWhite = Time.time + _gm.scareLength * 0.66f;
         _timeToToggleWhite = _timeToWhite;
         GetComponent<Animator>().SetBool("Run_White", false);
 
-	}
+    }
 
-	public void Calm()
-	{
+    public void Calm()
+    {
         // if the ghost is not running, do nothing
-	    if (state != State.Run) return;
+        if (state != State.Run) return;
 
-		waypoints.Clear ();
-		state = State.Chase;
-	    _timeToToggleWhite = 0;
-	    _timeToWhite = 0;
+        waypoints.Clear ();
+        state = State.Chase;
+        _timeToToggleWhite = 0;
+        _timeToWhite = 0;
         GetComponent<Animator>().SetBool("Run_White", false);
         GetComponent<Animator>().SetBool("Run", false);
-	}
+    }
 
     public void ToggleBlueWhite()
     {
