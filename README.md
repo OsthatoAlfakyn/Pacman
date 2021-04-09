@@ -3,6 +3,8 @@ Frustration-man
 
 Based on https://github.com/vilbeyli/Pacman.
 
+**Videos** can be seen here: [Normal](https://drive.google.com/file/d/1toJzWOEyYMaEvVxpQqhGICxoDhGrf1Ns/view), [Intense](https://drive.google.com/file/d/1p8tfuAQazJ-3CH9lxXHfrNstSjMSYVXB/view)
+
 The project is currently configured for the intense version. The relevant variables to change are exposed in the inspector as fields. The slow factor is under pacman, the others under Game Manager.
 
 | Field                  | Normal | Intense | Explanation
