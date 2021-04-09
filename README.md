@@ -1,8 +1,6 @@
 Frustration-man
 ============
 
-![Screenshot](http://i.imgur.com/GQcmfQY.png)
-
 Based on https://github.com/vilbeyli/Pacman.
 
 The project is currently configured for the intense version. The relevant variables to change are exposed in the inspector as fields. The slow factor is under pacman, the others under Game Manager.
